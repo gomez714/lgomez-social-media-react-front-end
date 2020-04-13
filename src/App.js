@@ -10,6 +10,10 @@ import Home from './pages/home';
 import Login from './pages/login';
 import SignUp from './pages/signup';
 
+//Redux
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
 // Components
 import Navbar from './components/navbar';
 import AuthRoute from './utility/authRoute';
@@ -32,21 +36,22 @@ class App extends Component {
   render(){
       return (
         <MuiThemeProvider theme={theme}>
-          <div className="App">
-          <Router>
-            <Navbar />
-            <div className='container'>
-            
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <AuthRoute exact path="/login" component={Login} authenticated={authenticated}/>
-                <AuthRoute exact path="/signup" component={SignUp} authenticated={authenticated}/>
+        <Provider store={store}>
+            <div className="App">
+            <Router>
+              <Navbar />
+              <div className='container'>
+              
+                <Switch>
+                  <Route exact path="/" component={Home} />
+                  <AuthRoute exact path="/login" component={Login} authenticated={authenticated}/>
+                  <AuthRoute exact path="/signup" component={SignUp} authenticated={authenticated}/>
+                </Switch>
+              </div>
 
-              </Switch>
-            </div>
-
-          </Router>
-        </div>
+            </Router>
+          </div>
+        </Provider>
         </MuiThemeProvider>
       );
     }

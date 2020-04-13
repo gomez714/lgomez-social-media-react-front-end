@@ -48,9 +48,9 @@ class SignUp extends Component {
         };
 
         axios.post('/signup', newUserData)
-            .then( result => {
-                console.log(result.data);
-                localStorage.setItem('FBIdToken', `Bearer ${result.data.token}`);
+            .then( response => {
+                console.log(response.data);
+                localStorage.setItem('FBIdToken', `Bearer ${response.data.token}`);
                 this.setState({
                     loading: false
                 });

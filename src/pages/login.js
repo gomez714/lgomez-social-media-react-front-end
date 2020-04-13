@@ -15,6 +15,11 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
+//REDUX
+
+import { connect } from 'react-redux';
+import { loginUser } from '../redux/actions/userActions';
+
 
 const styles = themeFile;
 
@@ -26,38 +31,26 @@ class Login extends Component {
         this.state = {
             email: '',
             password: '',
-            loading: false,
             errors: {}
 
         }
     }
 
+    componentWillReceiveProps(nextProps){
+        if(nextProps.UI.errors){
+            this.setState({ errors: nextProps.UI.errors});
+        }
+    }
+
     handleSubmit = (event) => {
         event.preventDefault();
-        this.setState({
-            loading: true
-        });
 
         const userData = {
             email: this.state.email,
             password: this.state.password
         };
 
-        axios.post('/login', userData)
-            .then( result => {
-                console.log(result.data);
-                localStorage.setItem('FBIdToken', `Bearer ${result.data.token}`);
-                this.setState({
-                    loading: false
-                });
-                this.props.history.push('/');
-            })
-            .catch( error => {
-                this.setState({
-                    errors: error.response.data,
-                    loading: false
-                });
-            })
+        this.props.loginUser(userData, this.props.history);
     }
 
     handleChange = (event) => {
@@ -67,8 +60,8 @@ class Login extends Component {
     };
 
     render() {
-        const { classes } = this.props;
-        const { errors, loading } = this.state;
+        const { classes, UI: {loading} } = this.props;
+        const { errors } = this.state;
 
         return (
             <Grid container className={classes.form}>
@@ -124,7 +117,21 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-    classes: PropTypes.object.isRequired
-}
+    classes: PropTypes.object.isRequired,
+    loginUser: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
+    UI: PropTypes.object.isRequired
+};
 
-export default withStyles(styles)(Login);
+const mapStateToProps = (state) => ({
+    user: state.user,
+    UI: state.UI
+});
+
+const mapActionToProps = {
+    loginUser
+};
+
+Login = connect(mapStateToProps, mapActionToProps)(withStyles(styles)(Login))
+
+export default Login;
