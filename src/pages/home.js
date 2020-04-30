@@ -1,29 +1,28 @@
 import React, { Component } from 'react'
 import Grid  from '@material-ui/core/Grid';
 import axios from 'axios';
+import PropTypes from 'prop-types';
+
+import { connect } from 'react-redux';
+import { getCrafts } from '../redux/actions/dataActions';
+
 
 import Craft from '../components/craft.js';
+import Profile from '../components/profile';
 
 class Home extends Component {
 
-    state = {
-        crafts: null
-    }
 
     componentDidMount(){
-        axios.get('/crafts')
-            .then(result => {
-                this.setState({
-                    crafts: result.data
-                })
-            })
-            .catch(error => console.log(error));
-    }
+        this.props.getCrafts();
+    };
 
     render() {
 
-        let recentCraftsMarkup = this.state.crafts ? (
-        this.state.crafts.map(craft => <Craft key={craft.craftId} craft={craft}/>)
+        const { crafts, loading } = this.props.data;
+        
+        let recentCraftsMarkup = !loading ? (
+            crafts.map(craft => <Craft key={craft.craftId} craft={craft}/>)
         ) : (
             <p>Loading...</p>
         );
@@ -34,11 +33,20 @@ class Home extends Component {
                     {recentCraftsMarkup}
                 </Grid>
                 <Grid item sm={4} xs={12}>
-                    <p>Profile. . .</p>
+                    <Profile />
                 </Grid>
             </Grid>
         )
     }
 }
 
-export default Home;
+Home.propTypes = {
+    getCrafts: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => ({
+    data: state.data
+});
+
+export default connect(mapStateToProps, { getCrafts })(Home);
