@@ -1,13 +1,11 @@
 import {
     SET_USER,
-    SET_ERRORS,
-    CLEAR_ERRORS,
-    LOADING_UI,
     SET_AUTHENTICATED,
     SET_UNAUTHENTICATED,
     LOADING_USER,
     LIKE_CRAFT,
-    UNLIKE_CRAFT
+    UNLIKE_CRAFT,
+    MARK_NOTIFICATIONS_READ
 } from '../types';
 
 const INITIAL_STATE = {
@@ -56,6 +54,12 @@ export default function( state = INITIAL_STATE, action){
                     (like) => like.craftId !== action.payload.craftId
                 )
             }
+        case MARK_NOTIFICATIONS_READ:
+            state.notifications.forEach(notification => notification.read = true);
+            return {
+                ...state
+            };
+
         default:
             return state;
     }

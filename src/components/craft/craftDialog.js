@@ -1,14 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-import themeFile from '../utility/theme';
-import MyButton from '../utility/myButton';
+import MyButton from '../../utility/myButton';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
+import Comments from './comments';
+import CommentForm from './commentForm';
 
 // Redux
 import { connect } from 'react-redux';
-import { getCraft } from '../redux/actions/dataActions';
+import { getCraft, clearErrors } from '../../redux/actions/dataActions';
 import LikeButton from './likeButton';
 
 // MUI
@@ -24,11 +25,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import ChatIcon from '@material-ui/icons/Chat';
 
 
-const styles = {
-    themeFile,
-    invisibleSeperator: {
-        border: 'none',
-        margin: 4
+const styles = theme => ({
+    dialogContent: {
+        padding: 20
     },
     profileImage: {
         maxWidth: 200,
@@ -36,13 +35,10 @@ const styles = {
         borderRadius: '50%',
         objectFit: 'cover'
     },
-    dialogContent: {
-        padding: 20
-    },
     closeButton: {
         position: 'absolute',
         left: '90%',
-        top: '6%'
+        top: '3%'
     },
     expandButton: {
         position: 'absolute',
@@ -52,23 +48,46 @@ const styles = {
         textAlign: 'center',
         marginTop: 50,
         marginBottomg: 50
-    }
-};
+    },
+    ...theme.spreadIt
+});
 
 
 class CraftDialog extends Component {
 
     state = {
         open: false,
-    }
+        oldPath: '',
+        newPath: ''
+    };
+
+    
 
     handleOpen = () => {
-        this.setState({ open: true});
+
+        let oldPath = window.location.pathname;
+
+        const { userHandle, craftId } = this.props;
+        const newPath = `/users/${userHandle}/craft/${craftId}`;
+
+        if(oldPath === newPath) oldPath = `/users/${userHandle}`;
+
+        window.history.pushState(null, null, newPath);
+
+        this.setState({ open: true, oldPath, newPath});
         this.props.getCraft(this.props.craftId);
     };
 
     handleClose = () => {
+        window.history.pushState(null, null, this.state.oldPath);
         this.setState({ open: false});
+        this.props.clearErrors();
+    }
+
+    componentDidMount(){
+        if(this.props.openDialog){
+            this.handleOpen();
+        }
     }
 
     render() {
@@ -82,7 +101,8 @@ class CraftDialog extends Component {
                 likeCount,
                 commentCount,
                 userImage,
-                userHandle
+                userHandle,
+                comments
             },
             UI: { loading }
         } = this.props;
@@ -92,7 +112,7 @@ class CraftDialog extends Component {
                 <CircularProgress size={200} thickness={2} />
             </div>
         ) : (
-            <Grid container spacing={16}>
+            <Grid container spacing={2}>
                 <Grid item sm={5}>
                     <img src={userImage} alt='profile' className={classes.profileImage} />
                 </Grid>
@@ -103,13 +123,13 @@ class CraftDialog extends Component {
                         variant='h5'  
                         to={`/users/${userHandle}`}  
                     >
-                        @{userHandle}
+                        {userHandle}
                     </Typography>
-                    <hr className={classes.invisibleSeperator}/>
+                    <hr className={classes.invisibleSeparator}/>
                     <Typography variant='body2'color='textSecondary'>
                         {dayjs(createdAt).format('h:mm a, MMMM DD YYYY')}
                     </Typography>
-                    <hr className={classes.invisibleSeperator}/>
+                    <hr className={classes.invisibleSeparator}/>
                     <Typography variant='body1'>
                         {body}
                     </Typography>
@@ -120,6 +140,9 @@ class CraftDialog extends Component {
                     </MyButton>
                     <span>{commentCount} comments</span>
                 </Grid>
+                <hr className={classes.visibleSeparator} />
+                <CommentForm craftId={craftId} />
+                <Comments comments={comments} />
             </Grid>
         )
 
@@ -151,16 +174,17 @@ CraftDialog.propTypes = {
     craftId: PropTypes.string.isRequired,
     userHandle: PropTypes.string.isRequired,
     craft: PropTypes.object.isRequired,
-    UI: PropTypes.object.isRequired
-
+    UI: PropTypes.object.isRequired,
+    clearErrors: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
-    craft: state.data. craft,
+    craft: state.data.craft,
     UI: state.UI
 });
 
 const mapActionsToProps = {
-    getCraft
+    getCraft,
+    clearErrors
 };
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(CraftDialog));

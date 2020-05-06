@@ -1,13 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-import themeFile from '../utility/theme';
-import MyButton from '../utility/myButton';
+import MyButton from '../../utility/myButton';
 
 
 //Redux
 import { connect } from 'react-redux';
-import { editUserDetails } from '../redux/actions/userActions';
+import { editUserDetails } from '../../redux/actions/userActions';
 
 //MUI
 import Button from '@material-ui/core/Button';
@@ -21,11 +20,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 //Icons
 import EditIcon from '@material-ui/icons/Edit';
 
-const styles = ({
-    themeFile,
+const styles = theme => ({
+    ...theme.spreadIt,
     button: {
         float: 'right'
-    }
+    },
 });
 
 class editDetails extends Component {

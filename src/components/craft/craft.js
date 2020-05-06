@@ -16,7 +16,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography  from '@material-ui/core/Typography';
-import MyButton from '../utility/myButton';
+import MyButton from '../../utility/myButton';
 
 // Icons
 import ChatIcon from '@material-ui/icons/Chat';
@@ -63,13 +63,12 @@ class Craft extends Component {
                     handle
                 }
             }
-     } = this.props;
-
-        
+        } = this.props;
 
         const deleteButton = authenticated && userHandle === handle ? (
             <DeleteCraft craftId={craftId}/>
         ) : (null); 
+
         return (
             <Card className={classes.card}>
                 <CardMedia
@@ -87,7 +86,7 @@ class Craft extends Component {
                         <ChatIcon color='primary'/>
                     </MyButton>
                     <span>{commentCount} comments</span>
-                    <CraftDialog craftId={craftId} userHandle={userHandle} />
+                    <CraftDialog craftId={craftId} userHandle={userHandle} openDialog={this.props.openDialog}/>
                 </CardContent>
             </Card>
         )
@@ -97,7 +96,8 @@ class Craft extends Component {
 Craft.propTypes = {
     user: PropTypes.object.isRequired,
     craft: PropTypes.object.isRequired,
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    openDialog: PropTypes.bool
 };
 
 const mapStateToProps = (state) => ({

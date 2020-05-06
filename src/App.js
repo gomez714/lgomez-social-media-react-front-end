@@ -1,25 +1,26 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import './App.css';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
+import axios from 'axios';
+import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import themeFile from './utility/theme';
 import JwtDecode from 'jwt-decode';
+
 // Pages
 import Home from './pages/home';
 import Login from './pages/login';
 import SignUp from './pages/signup';
+import User from './pages/user';
 
 //Redux
 import { Provider } from 'react-redux';
 import store from './redux/store';
-import { SET_AUTHENTICATED, SET_UNAUTHENTICATED } from './redux/types';
+import { SET_AUTHENTICATED } from './redux/types';
 import { logoutUser, getUserData } from './redux/actions/userActions';
 
 // Components
-import Navbar from './components/navbar';
+import Navbar from './components/layout/navbar';
 import AuthRoute from './utility/authRoute';
-import axios from 'axios';
 
 const theme = createMuiTheme(themeFile);
 
@@ -50,6 +51,8 @@ class App extends Component {
                   <Route exact path="/" component={Home} />
                   <AuthRoute exact path="/login" component={Login} />
                   <AuthRoute exact path="/signup" component={SignUp} />
+                  <Route exact path="/users/:handle" component={User} />
+                  <Route exact path="/users/:handle/craft/:craftId" component={User} />
                 </Switch>
               </div>
 

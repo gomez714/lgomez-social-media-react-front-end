@@ -3,6 +3,7 @@ export const SET_AUTHENTICATED = 'SET_AUTHENTICATED';
 export const SET_UNAUTHENTICATED = 'SET_UNAUTHENTICATED';
 export const SET_USER = 'SET_USER';
 export const LOADING_USER = 'LOADING_USER';
+export const MARK_NOTIFICATIONS_READ = 'MARK_NOTIFICATIONS_READ';
 
 //UI reducer types
 export const SET_ERRORS = 'SET_ERRORS';
@@ -18,4 +19,5 @@ export const LIKE_CRAFT = 'LIKE_CRAFT';
 export const UNLIKE_CRAFT = 'UNLIKE_CRAFT';
 export const DELETE_CRAFT = 'DELETE_CRAFT';
 export const POST_CRAFT = 'POST_CRAFT';
+export const SUBMIT_COMMENT = 'SUBMIT_COMMENT';
 

@@ -9,7 +9,8 @@ import {
     POST_CRAFT,
     SET_ERRORS,
     SET_CRAFT,
-    STOP_LOADING_UI
+    STOP_LOADING_UI,
+    SUBMIT_COMMENT
 } from '../types';
 
 import axios from 'axios';
@@ -94,6 +95,25 @@ export const unlikeCraft = (craftId) => dispatch => {
 
 };
 
+// Submit a comment
+
+export const submitComment = (craftId, commentData) => (dispatch) => {
+    axios.post(`/craft/${craftId}/comment`, commentData)
+        .then((response) => {
+            dispatch({
+                type: SUBMIT_COMMENT,
+                payload: response.data
+            });
+            dispatch(clearErrors());
+        })
+        .catch( (error) => {
+            dispatch({
+                type: SET_ERRORS,
+                payload: error.response.data
+            });
+        })
+}
+
 // Delete Craft
 
 export const deleteCraft = (craftId) => (dispatch) => {
@@ -106,6 +126,23 @@ export const deleteCraft = (craftId) => (dispatch) => {
         })
         .catch( (error) => console.log(error));
 };
+
+export const getUserData = (userHandle) => (dispatch) => {
+    dispatch({ type: LOADING_DATA});
+    axios.get(`/user/${userHandle}`)
+        .then( (response) => {
+            dispatch({
+                type: SET_CRAFTS,
+                payload: response.data.crafts
+            });
+        })
+        .catch( () => {
+            dispatch({
+                type: SET_CRAFTS,
+                payload: null
+            });
+        });
+}
 
 //Clear errors 
 export const clearErrors = () => (dispatch) => {

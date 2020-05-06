@@ -1,12 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-import themeFile from '../utility/theme';
-import MyButton from '../utility/myButton';
+import MyButton from '../../utility/myButton';
 
 //Redux
 import { connect } from 'react-redux';
-import { postCraft, clearErrors } from '../redux/actions/dataActions';
+import { postCraft, clearErrors } from '../../redux/actions/dataActions';
 
 //MUI
 import Button from '@material-ui/core/Button';
@@ -20,8 +19,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import BrushIcon from '@material-ui/icons/Brush';
 import CloseIcon from '@material-ui/icons/Close';
 
-const styles = ({
-    themeFile,
+const styles = theme => ({
     submitButton: {
         position: 'relative',
         float: 'right',
@@ -34,7 +32,8 @@ const styles = ({
         position: 'absolute',
         left: '91%',
         top: '4%'
-    }
+    },
+    ...theme.spreadIt
 });
 
 class PostCraft extends Component {
@@ -45,7 +44,7 @@ class PostCraft extends Component {
         errors: {}
     };
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         if(nextProps.UI.errors){
             this.setState({
                 errors: nextProps.UI.errors

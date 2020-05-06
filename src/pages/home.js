@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import Grid  from '@material-ui/core/Grid';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { getCrafts } from '../redux/actions/dataActions';
 
 
-import Craft from '../components/craft.js';
-import Profile from '../components/profile';
+import Craft from '../components/craft/craft';
+import Profile from '../components/profile/profile';
+import CraftSkeleton from '../utility/craftSkeleton';
 
 class Home extends Component {
 
@@ -24,16 +24,16 @@ class Home extends Component {
         let recentCraftsMarkup = !loading ? (
             crafts.map(craft => <Craft key={craft.craftId} craft={craft}/>)
         ) : (
-            <p>Loading...</p>
+            <CraftSkeleton />
         );
 
         return (
-            <Grid container spacing={16}>
-                <Grid item sm={8} xs={12}>
-                    {recentCraftsMarkup}
-                </Grid>
+            <Grid container spacing={2}>
                 <Grid item sm={4} xs={12}>
                     <Profile />
+                </Grid>
+                <Grid item sm={8} xs={12}>
+                    {recentCraftsMarkup}
                 </Grid>
             </Grid>
         )

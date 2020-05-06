@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AppLogo from '../images/artists-integrate.png';
 import { Link } from 'react-router-dom';
-import themeFile from '../utility/theme';
 
 //Material-UI
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -18,7 +17,9 @@ import { signupUser } from '../redux/actions/userActions';
 
 
 
-const styles = themeFile;
+const styles = theme => ({
+    ...theme.spreadIt
+})
 
 
 
@@ -36,7 +37,7 @@ class SignUp extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps){
+    UNSAFE_componentWillReceiveProps(nextProps){
         if(nextProps.UI.errors){
             this.setState({ errors: nextProps.UI.errors});
         }
@@ -116,7 +117,7 @@ class SignUp extends Component {
                         id='handle'
                         name='handle'
                         type='text'
-                        label='Handle'
+                        label='Username'
                         className={classes.textField}
                         helperText={errors.handle}
                         error={errors.handle ? true : false}

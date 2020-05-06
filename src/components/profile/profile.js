@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import dayjs from 'dayjs';
 import EditDetails from './editDetails';
-import MyButton from '../utility/myButton';
+import MyButton from '../../utility/myButton';
+import ProfileSkeleton from '../../utility/profileSkeleton';
+
 
 // Redux
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { logoutUser, uploadImage } from '../redux/actions/userActions';
+import { logoutUser, uploadImage } from '../../redux/actions/userActions';
 
 // MUI
 import Button from '@material-ui/core/Button';
@@ -51,7 +53,8 @@ const styles = {
             verticalAlign: 'middle'
           },
           '& a': {
-            color: '#00bcd4'
+            color: '#00e676',
+            textDecoration: 'none'
           }
         },
         '& hr': {
@@ -113,7 +116,7 @@ class Profile extends Component {
                         <hr/>
                         <div className='profile-details'>
                             <MuiLink component={Link} to={`/users/${handle}`} color='primary' variant='h5'>
-                                @{handle}
+                                {handle}
                             </MuiLink>
                             <hr/>
                             {bio && <Typography variant='body2'>{bio}</Typography>}
@@ -156,7 +159,7 @@ class Profile extends Component {
                         </Button>
                     </div>
                 </Paper>
-            ) ) : (<p>loading...</p>);
+            ) ) : (<ProfileSkeleton />);
 
         return profileMarkup;
     }

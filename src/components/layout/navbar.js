@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import MyButton from '../utility/myButton';
-import PostCraft from './postCraft';
-
+import MyButton from '../../utility/myButton';
+import PostCraft from '../craft/postCraft';
+import Notifications from './notifications';
+import withStyles from '@material-ui/core/styles/withStyles';
 
 //Redux
 import { Link } from 'react-router-dom';
@@ -16,13 +17,17 @@ import Button from '@material-ui/core/Button';
 
 //Icons
 import HomeIcon from '@material-ui/icons/Home';
-import Notifications from '@material-ui/icons/Notifications';
 
+const styles = {
+    Button: {
+        margin: 3
+    }
+};
 
 class Navbar extends Component {
     render() {
 
-        const { authenticated } = this.props;
+        const { authenticated, classes } = this.props;
 
         return (
             <AppBar>
@@ -35,15 +40,13 @@ class Navbar extends Component {
                                     <HomeIcon color='secondary'/>
                                 </MyButton>
                             </Link>
-                            <MyButton tip='Notifications'>
-                                <Notifications color='secondary'/>
-                            </MyButton>
+                            <Notifications/>
                         </Fragment>
                     ) : (
                         <Fragment>
-                            <Button variant="contained" color="secondary" component={Link} to='/login' >Login</Button>
-                            <Button variant="contained" color="secondary" component={Link} to='/'>Home</Button>
-                            <Button variant="contained" color="secondary" component={Link} to='/signup' >Sign Up</Button>
+                            <Button className={classes.Button}  color="secondary" component={Link} to='/login'>Login</Button>
+                            <Button className={classes.Button}  color="secondary" component={Link} to='/'>Home</Button>
+                            <Button className={classes.Button}  color="secondary" component={Link} to='/signup' >Sign Up</Button>
                         </Fragment>
                     )}
                 </Toolbar>
@@ -57,7 +60,8 @@ const mapStatetoProps = (state) => ({
 })
 
 Navbar.propTypes = {
-    authenticated: PropTypes.bool.isRequired
+    authenticated: PropTypes.bool.isRequired,
+    classes: PropTypes.object.isRequired
 }
 
-export default connect(mapStatetoProps)(Navbar);
+export default connect(mapStatetoProps)(withStyles(styles)(Navbar));

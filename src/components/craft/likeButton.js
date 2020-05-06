@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import MyButton from '../utility/myButton';
+import MyButton from '../../utility/myButton';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 //Redux
 import { connect } from 'react-redux';
-import { likeCraft, unlikeCraft  } from '../redux/actions/dataActions';
+import { likeCraft, unlikeCraft  } from '../../redux/actions/dataActions';
 
 //Icons
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -17,7 +17,7 @@ export class LikeButton extends Component {
     likedCraft = () => {
         if(this.props.user.likes && this.props.user.likes.find(like => like.craftId === this.props.craftId))
             return true;
-            else return false;
+        else return false;
     };
 
     likeCraft = () => {

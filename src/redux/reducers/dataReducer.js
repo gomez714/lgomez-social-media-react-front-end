@@ -5,7 +5,8 @@ import {
     LOADING_DATA,
     DELETE_CRAFT,
     POST_CRAFT,
-    SET_CRAFT
+    SET_CRAFT,
+    SUBMIT_COMMENT
 } from '../types';
 
 const INITIAL_STATE = {
@@ -37,7 +38,7 @@ export default function(state = INITIAL_STATE, action){
             let index = state.crafts.findIndex((craft) => craft.craftId === action.payload.craftId);
             state.crafts[index] = action.payload;
             if (state.craft.craftId === action.payload.craftId) {
-                state.craft = action.payload;
+                state.craft = {...state.craft, ...action.payload}
               };
             return {
                 ...state
@@ -55,8 +56,24 @@ export default function(state = INITIAL_STATE, action){
                     action.payload,
                     ...state.crafts
                 ]
-            }
-        
+            };
+        case SUBMIT_COMMENT:
+                let commentedOnIndex = state.crafts.findIndex(
+                craft => craft.craftId === action.payload.craftId
+                );
+                return {
+                    ...state,
+                    craft: {
+                    ...state.craft,
+                    comments: [action.payload, ...state.craft.comments],
+                    commentCount: state.craft.commentCount + 1
+                    },
+                    crafts: state.crafts.map((craft, craftsArrIndex) =>
+                    craftsArrIndex === commentedOnIndex
+                        ? { ...craft, commentCount: craft.commentCount + 1 }
+                        : craft
+                    )
+                };
     
         default: return state;
     }

@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import AppLogo from '../images/artists-integrate.png';
 import { Link } from 'react-router-dom';
 
-import themeFile from '../utility/theme';
-
 //Material-UI
 import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
@@ -13,14 +11,14 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-
 //REDUX
-
 import { connect } from 'react-redux';
 import { loginUser } from '../redux/actions/userActions';
 
 
-const styles = themeFile;
+const styles = theme => ({
+    ...theme.spreadIt
+});
 
 
 class Login extends Component {
@@ -35,7 +33,7 @@ class Login extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps){
+    UNSAFE_componentWillReceiveProps(nextProps){
         if(nextProps.UI.errors){
             this.setState({ errors: nextProps.UI.errors});
         }
